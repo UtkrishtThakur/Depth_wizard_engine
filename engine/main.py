@@ -87,13 +87,8 @@ class DepthWizardPipeline:
         small_scale: float = 2.0,
         medium_scale: float = 8.0,
         large_scale: float = 32.0,
-        small_gain: float = 0.5,
-        medium_gain: float = 1.1,
-        large_gain: float = 1.0,
-        local_gain: float = 1.2,
+        structure_gain: float = 1.3,
         edge_strength: float = 0.5,
-        regularize: bool = True,
-        planar_fitting: bool = True,
     ) -> None:
 
         self.project_root = (
@@ -118,13 +113,8 @@ class DepthWizardPipeline:
         self.small_scale = small_scale
         self.medium_scale = medium_scale
         self.large_scale = large_scale
-        self.small_gain = small_gain
-        self.medium_gain = medium_gain
-        self.large_gain = large_gain
-        self.local_gain = local_gain
+        self.structure_gain = structure_gain
         self.edge_strength = edge_strength
-        self.regularize = regularize
-        self.planar_fitting = planar_fitting
 
         self.input_dir = self.project_root / "input"
         self.processed_dir = self.project_root / "engine" / "processed"
@@ -246,13 +236,8 @@ class DepthWizardPipeline:
             small_scale=self.small_scale,
             medium_scale=self.medium_scale,
             large_scale=self.large_scale,
-            small_gain=self.small_gain,
-            medium_gain=self.medium_gain,
-            large_gain=self.large_gain,
-            local_gain=self.local_gain,
+            structure_gain=self.structure_gain,
             edge_strength=self.edge_strength,
-            regularize=self.regularize,
-            planar_fitting=self.planar_fitting,
         )
 
         refined_height_npy = refiner.process()
@@ -275,13 +260,9 @@ class DepthWizardPipeline:
             output_path=self.processed_dir / "terrain.glb",
             height_scale=self.height_scale,
             mesh_stride=self.mesh_stride,
+            world_depth=100.0,
         )
-
-        terrain_glb = terrain_generator.generate()
-
-        if not terrain_glb.exists():
-            raise RuntimeError(f"TerrainGenerator failed to output {terrain_glb}")
-
+        terrain_generator.generate()
         print()
 
         # --------------------------------------------------------------
@@ -354,7 +335,6 @@ class DepthWizardPipeline:
             self.processed_dir / "structure_confidence.png",
             self.processed_dir / "structure_edges.npy",
             self.processed_dir / "structure_edges.png",
-            self.processed_dir / "structure_regions.json",
             self.processed_dir / "terrain.glb",
             self.processed_dir / "enhanced_texture.png",
             self.processed_dir / "textured_terrain.glb",
@@ -439,10 +419,8 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--small-scale", type=float, default=2.0)
     parser.add_argument("--medium-scale", type=float, default=8.0)
     parser.add_argument("--large-scale", type=float, default=32.0)
-    parser.add_argument("--small-gain", type=float, default=0.5)
-    parser.add_argument("--medium-gain", type=float, default=1.1)
-    parser.add_argument("--large-gain", type=float, default=1.0)
-    parser.add_argument("--local-gain", type=float, default=1.2)
+    parser.add_argument("--structure-gain", type=float, default=1.3)
+    parser.add_argument("--min-structure-relief", type=float, default=0.01)
     parser.add_argument("--edge-strength", type=float, default=0.5)
     parser.add_argument("--no-regularize", action="store_true", help="Disable bilateral smoothing")
     parser.add_argument("--no-planar-fitting", action="store_true", help="Disable planar fitting")
@@ -465,13 +443,8 @@ def main() -> None:
         small_scale=args.small_scale,
         medium_scale=args.medium_scale,
         large_scale=args.large_scale,
-        small_gain=args.small_gain,
-        medium_gain=args.medium_gain,
-        large_gain=args.large_gain,
-        local_gain=args.local_gain,
+        structure_gain=args.structure_gain,
         edge_strength=args.edge_strength,
-        regularize=not args.no_regularize,
-        planar_fitting=not args.no_planar_fitting,
     )
 
     try:
