@@ -1,0 +1,26 @@
+# Source control and env
+.git
+.gitignore
+.env
+
+# Python caches
+__pycache__
+*.pyc
+*.pyo
+
+# Virtual environments
+.venv
+venv
+
+# Data and large artifacts (since we bind-mount, we don't want these in the build context)
+models/
+input/
+engine/processed/
+output/
+
+# OS / Editor
+.DS_Store
+*.log
+*.tmp
+.vscode
+.idea

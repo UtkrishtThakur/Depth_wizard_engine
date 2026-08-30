@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DepthWizard Viewer</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="ui-layer">
+      <div id="status-overlay" class="overlay">
+        <h1>DepthWizard</h1>
+        <p id="status-text">Loading terrain...</p>
+      </div>
+      
+      <div id="hud" style="display: none;">
+        <h3>DEPTHWIZARD</h3>
+        <p>WASD  Move</p>
+        <p>Q/E   Vertical</p>
+        <p>SHIFT Speed</p>
+        <p>Mouse Look</p>
+        <p>ESC   Release cursor</p>
+      </div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

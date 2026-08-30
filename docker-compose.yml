@@ -1,0 +1,11 @@
+services:
+  depthwizard:
+    build: .
+    # Mount the entire project directory into /app for true hot-reload
+    volumes:
+      - ./:/app
+    # Ensure stdin and tty are open for interactive bash sessions
+    stdin_open: true
+    tty: true
+    # Provide a simple robust keep-alive command
+    command: ["sleep", "infinity"]
