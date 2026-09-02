@@ -1,0 +1,67 @@
+services:
+  # ── PostgreSQL ───────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: depthwizard
+      POSTGRES_PASSWORD: depthwizard
+      POSTGRES_DB: depthwizard
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U depthwizard"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # ── API Server ───────────────────────────────────────────────────
+  depthwizard-api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    volumes:
+      - ./:/app
+      - process-data:/app/data
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://depthwizard:depthwizard@postgres:5432/depthwizard
+      PROJECT_ROOT: /app
+      DATA_DIR: /app/data
+      MODEL_ROOT: /app/models
+      DEVICE: cpu
+      CORS_ORIGINS: "http://localhost:5173,http://localhost:3000,http://localhost:8000"
+      PYTHONPATH: /app:/app/api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app/api
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  # ── Generation Worker ────────────────────────────────────────────
+  depthwizard-worker:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    volumes:
+      - ./:/app
+      - process-data:/app/data
+    environment:
+      DATABASE_URL: postgresql+psycopg://depthwizard:depthwizard@postgres:5432/depthwizard
+      PROJECT_ROOT: /app
+      DATA_DIR: /app/data
+      MODEL_ROOT: /app/models
+      DEVICE: cpu
+      WORKER_POLL_INTERVAL: "2.0"
+      PYTHONPATH: /app:/app/api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app/api
+    command: ["python", "-m", "app.services.worker"]
+
+volumes:
+  pgdata:
+  process-data:

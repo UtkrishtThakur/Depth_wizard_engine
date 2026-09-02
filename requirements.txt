@@ -1,0 +1,12 @@
+# DepthWizard Engine Dependencies
+# Install with: pip install --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
+torch
+torchvision
+numpy
+opencv-python-headless
+pillow
+scipy
+trimesh
+matplotlib
+omegaconf
+PyYAML
