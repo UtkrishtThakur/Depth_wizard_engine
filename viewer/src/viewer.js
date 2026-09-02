@@ -108,6 +108,7 @@ export class Viewer {
             url,
             (gltf) => {
                 const model = gltf.scene;
+                this.currentTerrain = model;
                 this.scene.add(model);
                 
                 // --- DIAGNOSTIC LOGGING ---
@@ -156,6 +157,30 @@ export class Viewer {
                 if (this.callbacks.onError) this.callbacks.onError(error);
             }
         );
+    }
+
+    clearTerrain() {
+        if (this.currentTerrain) {
+            this.scene.remove(this.currentTerrain);
+            this.currentTerrain.traverse((child) => {
+                if (child.isMesh) {
+                    if (child.geometry) child.geometry.dispose();
+                    if (child.material) {
+                        if (Array.isArray(child.material)) {
+                            child.material.forEach(mat => mat.dispose());
+                        } else {
+                            child.material.dispose();
+                        }
+                    }
+                }
+            });
+            this.currentTerrain = null;
+        }
+    }
+
+    loadNewTerrain(url) {
+        this.clearTerrain();
+        this.loadTerrain(url);
     }
 
     frameTerrain(model) {

@@ -8,9 +8,40 @@
   </head>
   <body>
     <div id="ui-layer">
-      <div id="status-overlay" class="overlay">
+      <div id="status-overlay" class="overlay hidden">
         <h1>DepthWizard</h1>
         <p id="status-text">Loading terrain...</p>
+      </div>
+      
+      <div id="control-panel" class="overlay panel">
+        <h1>DepthWizard API</h1>
+        
+        <div id="upload-section">
+          <input type="file" id="image-input" accept="image/png, image/jpeg, image/webp, image/tiff" style="display: none;" />
+          <button id="select-btn" class="btn outline">Select Image</button>
+          <div id="file-info" class="hidden">
+            <img id="image-preview" src="" alt="Preview" />
+            <span id="filename">No file selected</span>
+          </div>
+          <button id="generate-btn" class="btn primary" disabled>Generate</button>
+        </div>
+
+        <div id="process-section" class="hidden">
+          <div class="status-header">
+            <strong>Process ID:</strong> <span id="process-id"></span>
+          </div>
+          <div class="status-header">
+            <strong>Status:</strong> <span id="process-status" class="badge">QUEUED</span>
+          </div>
+          
+          <div id="log-container" class="log-panel">
+            <div id="log-messages"></div>
+          </div>
+          
+          <div id="error-message" class="error-text hidden"></div>
+          
+          <button id="new-process-btn" class="btn outline hidden">Generate Another</button>
+        </div>
       </div>
       
       <div id="hud" style="display: none;">
