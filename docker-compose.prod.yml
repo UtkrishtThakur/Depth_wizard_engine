@@ -117,8 +117,7 @@ services:
 
       # Router
       - "traefik.http.routers.depthwizard-api.rule=Host(`depthwizardapi.devlooper.co.in`)"
-      - "traefik.http.routers.depthwizard-api.entrypoints=websecure"
-      - "traefik.http.routers.depthwizard-api.tls=true"
+      - "traefik.http.routers.depthwizard-api.entrypoints=web"
 
       # Backend service
       - "traefik.http.services.depthwizard-api.loadbalancer.server.port=8000"
@@ -167,10 +166,13 @@ services:
 
     command: [ "python", "-m", "app.services.worker" ]
 
+# ─────────────────────────────────────────────────────────────
+# Persistent volumes
+# ─────────────────────────────────────────────────────────────
 volumes:
 
-  # Persistent PostgreSQL data
+  # PostgreSQL database
   prod-depthwizard-postgres-data:
 
-  # Generated process files / GLBs / artifacts
+  # Process data, generated GLBs, artifacts, logs
   prod-depthwizard-process-data:
