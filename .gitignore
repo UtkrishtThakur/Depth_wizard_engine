@@ -1,27 +1,77 @@
+# ─────────────────────────────────────────────
 # Python
+# ─────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
+
 .env
+.env.*
+!.env.example
+
 venv/
 .venv/
 env/
 
+# ─────────────────────────────────────────────
 # Node
+# ─────────────────────────────────────────────
 node_modules/
 dist/
 build/
+
 viewer/node_modules/
 viewer/dist/
 viewer/build/
 
-# Project specific
+# ─────────────────────────────────────────────
+# Project generated data
+# ─────────────────────────────────────────────
 input/
-models/
 engine/processed/
 
-# OS generated files
+# Runtime/generated artifacts
+data/
+*.glb
+*.obj
+*.ply
+
+# ─────────────────────────────────────────────
+# MODEL WEIGHTS — DO NOT COMMIT
+# ─────────────────────────────────────────────
+
+# Depth Anything checkpoints
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.bin
+
+# Specifically ignore model directories containing weights
+models/**/models/
+
+# ─────────────────────────────────────────────
+# Keep model architecture/configuration in Git
+# ─────────────────────────────────────────────
+!models/
+!models/depth_anything_v2/
+!models/depth_anything_v2/**
+!models/lama/
+!models/lama/big-lama/
+!models/lama/big-lama/config.yaml
+
+# ─────────────────────────────────────────────
+# Archives / temporary files
+# ─────────────────────────────────────────────
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# ─────────────────────────────────────────────
+# OS generated
+# ─────────────────────────────────────────────
 .DS_Store
 .DS_Store?
 ._*
