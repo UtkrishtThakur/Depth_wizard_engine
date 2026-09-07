@@ -25,8 +25,7 @@ def upgrade() -> None:
         "DEBUG", "INFO", "WARNING", "ERROR",
         name="log_level",
     )
-    process_status.create(op.get_bind(), checkfirst=True)
-    log_level.create(op.get_bind(), checkfirst=True)
+
 
     # processes
     op.create_table(

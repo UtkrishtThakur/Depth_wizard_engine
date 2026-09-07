@@ -98,6 +98,7 @@ services:
 
     volumes:
       - prod-depthwizard-process-data:/app/data
+      - ./models:/app/models:ro
 
     depends_on:
       prod-depthwizard-postgres:
@@ -153,6 +154,7 @@ services:
 
     volumes:
       - prod-depthwizard-process-data:/app/data
+      - ./models:/app/models:ro
 
     depends_on:
       prod-depthwizard-postgres:
