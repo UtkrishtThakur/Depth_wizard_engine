@@ -34,9 +34,10 @@ MAX_CONCURRENT_GENERATIONS: int = int(os.getenv("MAX_CONCURRENT_GENERATIONS", "1
 WORKER_POLL_INTERVAL: float = float(os.getenv("WORKER_POLL_INTERVAL", "2.0"))
 
 # ── CORS ─────────────────────────────────────────────────────────────
-CORS_ORIGINS: list[str] = os.getenv(
-    "CORS_ORIGINS", "http://localhost:5173,http://localhost:3000"
-).split(",")
+_raw_cors = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:3000")
+CORS_ORIGINS: list[str] = [
+    origin.strip() for origin in _raw_cors.split(",") if origin.strip()
+]
 
 # ── Device ───────────────────────────────────────────────────────────
 DEVICE: str = os.getenv("DEVICE", "cpu")
