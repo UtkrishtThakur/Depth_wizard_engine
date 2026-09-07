@@ -36,7 +36,9 @@ WORKER_POLL_INTERVAL: float = float(os.getenv("WORKER_POLL_INTERVAL", "2.0"))
 # ── CORS ─────────────────────────────────────────────────────────────
 _raw_cors = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:3000")
 CORS_ORIGINS: list[str] = [
-    origin.strip() for origin in _raw_cors.split(",") if origin.strip()
+    origin.strip().strip("\"'").rstrip("/")
+    for origin in _raw_cors.split(",")
+    if origin.strip()
 ]
 
 # ── Device ───────────────────────────────────────────────────────────
